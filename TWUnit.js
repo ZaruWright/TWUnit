@@ -44,19 +44,20 @@ TWUnit = function (){
 
 	/*Void Module*/
 	this.numberOfAsserts = 0;
-	this.asserts = [];
+	this.asserts = new Array();
 	this.allAssertsOk = true;
 
 	/*Modules with names*/
 	this.numberOfModules = 0;
-	this.modules = [];
+	this.modules = new Array();
 	this.allModulesOk = true;
 }
+
 
 /*
 * Here there are functions that works with the DOM tree of HTML.
 */
-TWUnit.HtmlInteract.prototype = {
+TWUnit.HtmlInteract = {
 	
 	/*
 	* This method write in the DOM tree a sorted list in which the elements
@@ -204,7 +205,7 @@ TWUnit.prototype = {
 			allAssertsOk: true
 		}
 
-		this.modules[this.numberOfModules] = module;
+		this.modules[module.name] = module;
 		this.numberOfModules++;
 
 		this.cleanAsserts();
@@ -237,7 +238,7 @@ TWUnit.prototype = {
 			clue: clue
 		};
 
-		this.asserts[this.numberOfAsserts] = element;
+		this.asserts[element.name] = element;
 		this.numberOfAsserts++;
 	},
 
@@ -245,7 +246,7 @@ TWUnit.prototype = {
 	* Free the void module
 	*/
 	cleanAsserts: function(){
-		this.asserts = [];
+		this.asserts = new Array();
 		this.numberOfAsserts = 0;
 	},
 
@@ -264,10 +265,11 @@ TWUnit.prototype = {
 	* Arguments:
 	*	1- iterator: In the second case, we use this argument to know what listAssert
 	*				 insert the text in the DOM tree
+	*	2- moduleName: The name of the module to can asign values to the module list.	
 	*/
-	runAsserts: function(iterator){
+	runAsserts: function(iterator, moduleName){
 
-		if (!iterator && iterator != 0){
+		if (!iterator && iterator != 0 && !moduleName){
 			TWUnit.HtmlInteract.htmlClear();
 			TWUnit.HtmlInteract.createHtmlCss();
 			list = this.asserts;
@@ -275,32 +277,32 @@ TWUnit.prototype = {
 			it = "";
 		}
 		else{
-			list = this.modules[iterator].asserts;
-			allAssertsOk = this.modules[iterator].allAssertsOk;
+			list = this.modules[moduleName].asserts;
+			allAssertsOk = this.modules[moduleName].allAssertsOk;
 			it = iterator;
 		}
 
 		allAssertsOk = true;
 
-		for (var i = 0; i < list.length; ++i) {
-			if (list[i].assertValue){
+		for (assertElement in list) {
+			if (list[assertElement].assertValue){
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[i].comment, it);
-				console.log(list[i].comment);
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].comment, it);
+				console.log(list[assertElement].comment);
 			}
 			else{
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[i].clue, it);
-				console.log(list[i].clue);
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].clue, it);
+				console.log(list[assertElement].clue);
 				allAssertsOk = false;
 			}
 		}
 
-		if ( !iterator && iterator != 0 ){
+		if ( !iterator && iterator != 0 && !moduleName){
 			this.allAssertsOk = allAssertsOk;
 		}
 		else{
-			this.modules[iterator].allAssertsOk = allAssertsOk;
+			this.modules[moduleName].allAssertsOk = allAssertsOk;
 		}
 	},
 
@@ -313,18 +315,22 @@ TWUnit.prototype = {
 	* If you want run the void module use the runAsserts function.
 	*/
 	runModules: function(){
+		
 		TWUnit.HtmlInteract.htmlClear();
 		TWUnit.HtmlInteract.createHtmlCss(true);
 
 		this.allModulesOk = true;
+		that = this;
 
-		for (var i = 0; i < this.numberOfModules; ++i){
-			console.log("Module:" + this.modules[i].name);
-			TWUnit.HtmlInteract.htmlModuleWrite(this.modules[i].name, i);
-			this.runAsserts(i);
-			if (!this.modules[i].allAssertsOk){
+		var index = 0;
+		for (element in this.modules){
+			console.log("Module:" + this.modules[element].name);
+			TWUnit.HtmlInteract.htmlModuleWrite(this.modules[element].name, index);
+			this.runAsserts(index, element);
+			if (!this.modules[element].allAssertsOk){
 				this.allModulesOk = false;
 			}
+			++index;
 		}
 
 	},
@@ -343,6 +349,13 @@ TWUnit.prototype = {
 	*/
 	modulesOk: function(){
 		return this.allModulesOk;
+	},
+
+	/*
+	* If the asserts from the module called named are true, this function will return true.
+	*/
+	moduleOk: function(name){
+		return this.modules[name].allAssertsOk;
 	}
 
 };
