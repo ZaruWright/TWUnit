@@ -71,10 +71,13 @@ TWUnit.HtmlInteract = {
 	*				 the DOM element from the tree to set the text value.
 	*				 This is more clearly in the explanation from the
 	*				 createHtmlCss function.
+	*	3- passTheText: This argument can take two values:
+	*					positive_test: name of your div element to show a positive assert.
+	*					negative_test: name of your div element to show a negative assert.
 	*/
-	htmlAssertWrite: function(text, iterator){
+	htmlAssertWrite: function(text, iterator, passTheText){
 		var ol = document.getElementById("assertList" + iterator );
-		ol.innerHTML += "<li id='assertList'>" + text + "</li>";
+		ol.innerHTML += "<div class=" + passTheText + "> <li id='assertList'>" + text + "</li> </div>";
 	},
 
 	/*
@@ -104,13 +107,13 @@ TWUnit.HtmlInteract = {
 	*
 	*	<div id="twunit"> 
 	*		<ol id='assertList'> 
-	*			<li> text from assert 1 </li> 
-	*			<li> text from assert 2 </li> 
-	*			<li> text from assert 3 </li> 
+	*			<div class="positive_text"><li> text from assert 1 </li></div>
+	*			<div class="negative_text"><li> text from assert 2 </li></div>
+	*			<div class="negative_text"><li> text from assert 3 </li></div>
 	*			............
 	*			  .......
 	*				 .
-	*			<li> text from assert n </li>
+	*			<div class="positive_text"><li> text from assert n </li></div>
 	*		</ol>
 	*	</div>
 	*
@@ -287,12 +290,12 @@ TWUnit.prototype = {
 		for (assertElement in list) {
 			if (list[assertElement].assertValue){
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].comment, it);
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].comment, it, "positive_test");
 				console.log(list[assertElement].comment);
 			}
 			else{
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].clue, it);
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].clue, it, "negative_test");
 				console.log(list[assertElement].clue);
 				allAssertsOk = false;
 			}
