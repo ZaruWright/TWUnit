@@ -71,13 +71,28 @@ TWUnit.HtmlInteract = {
 	*				 the DOM element from the tree to set the text value.
 	*				 This is more clearly in the explanation from the
 	*				 createHtmlCss function.
-	*	3- passTheText: This argument can take two values:
-	*					positive_test: name of your div element to show a positive assert.
-	*					negative_test: name of your div element to show a negative assert.
+	*	3- passTheText: It shows if the asserts was successful.
 	*/
 	htmlAssertWrite: function(text, iterator, passTheText){
 		var ol = document.getElementById("assertList" + iterator );
-		ol.innerHTML += "<div class=" + passTheText + "> <li id='assertList'>" + text + "</li> </div>";
+		if (passTheText){
+			ol.innerHTML += "<div class='positive_test'>" +
+								"<span class='glyphicon glyphicon-ok-sign'>" +
+									//"<li id='assertList'>" + text + "</li>" +
+									text +
+								"</span>" + 
+							"</div>";
+		}
+		else{
+			ol.innerHTML += "<div class='negative_test'>" +
+								"<span class='glyphicon glyphicon-remove-sign'>" +
+									//"<li id='assertList'>" + text + "</li>" +
+									text +
+								"</span>" +
+							"</div>";
+		}
+		
+		
 	},
 
 	/*
@@ -92,7 +107,7 @@ TWUnit.HtmlInteract = {
 	*/
 	htmlModuleWrite: function(text, iterator){
 		var ol = document.getElementById("moduleList");
-		ol.innerHTML += "<li id='moduleList"+ iterator +"'> "+ text +"</li> <ol id='assertList"+ iterator +"'> </ol>"
+		ol.innerHTML += "<li id='moduleList"+ iterator +"'> <h4>"+ text +"</h4> </li> <ol id='assertList"+ iterator +"'> </ol>"
 	},
 
 	/*
@@ -107,13 +122,13 @@ TWUnit.HtmlInteract = {
 	*
 	*	<div id="twunit"> 
 	*		<ol id='assertList'> 
-	*			<div class="positive_text"><li> text from assert 1 </li></div>
-	*			<div class="negative_text"><li> text from assert 2 </li></div>
-	*			<div class="negative_text"><li> text from assert 3 </li></div>
+	*			<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 1 </span></div>
+	*			<div class="negative_test"><span class='glyphicon glyphicon-remove-sign'>text from assert 2 </span></div>
+	*			<div class="negative_test"><span class='glyphicon glyphicon-remove-sign'> text from assert 3 </span></div>
 	*			............
 	*			  .......
 	*				 .
-	*			<div class="positive_text"><li> text from assert n </li></div>
+	*			<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert n </div>
 	*		</ol>
 	*	</div>
 	*
@@ -124,39 +139,39 @@ TWUnit.HtmlInteract = {
 	*
 	*	<div id="twunit"> 
 	*		<ol id='moduleList'> 
-	*			<li id='moduleList0'> Name from the module list in zero position </li> 
+	*			<li id='moduleList0'> <h4> Name from the module list in zero position </h4> </li> 
 	*			<ol id='assertList0'>
-	*				<li> text from assert 0 from assertList0 </li>
-	*				<li> text from assert 1 from assertList0 </li>
-	*				<li> text from assert 2 from assertList0 </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 0 from assertList0 </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 1 from assertList0 </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 2 from assertList0 </span></div>
 	*				............
 	*				  .......
 	*					 .
-	*				<li> text from assert n from assertList0 </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert n from assertList0 </span></div>
 	*			</ol>
 	*
-	*			<li id='moduleList1'> Name from the module list in one position </li> 
+	*			<li id='moduleList1'> <h4> Name from the module list in one position </h4> </li> 
 	*			<ol id='assertList1'>
-	*				<li> text from assert 0 from assertList1 </li>
-	*				<li> text from assert 1 from assertList1 </li>
-	*				<li> text from assert 2 from assertList1 </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 0 from assertList1 </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 1 from assertList1 </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 2 from assertList1 </span></div>
 	*				............
 	*				  .......
 	*					 .
-	*				<li> text from assert n from assertList1 </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert n from assertList1 </span></div>
 	*			</ol>
 	*			............
 	*		      .......
 	*			     .
-	*			<li id='moduleListm'> Name from the module list in m position </li> 
+	*			<li id='moduleListm'> <h4> Name from the module list in m position </h4> </li> 
 	*			<ol id='assertListm'>
-	*				<li> text from assert 0 from assertListm </li>
-	*				<li> text from assert 1 from assertListm </li>
-	*				<li> text from assert 2 from assertListm </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 0 from assertListm </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 1 from assertListm </span></div>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert 2 from assertListm </span></div>
 	*				............
 	*				  .......
 	*					 .
-	*				<li> text from assert n from assertListm </li>
+	*				<div class="positive_test"><span class='glyphicon glyphicon-ok-sign'> text from assert n from assertListm </span></div>
 	*			</ol>
 	*
 	*		</ol>
@@ -290,12 +305,12 @@ TWUnit.prototype = {
 		for (assertElement in list) {
 			if (list[assertElement].assertValue){
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].comment, it, "positive_test");
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].comment, it, true);
 				console.log(list[assertElement].comment);
 			}
 			else{
 				
-				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].clue, it, "negative_test");
+				TWUnit.HtmlInteract.htmlAssertWrite(list[assertElement].name + ": " + list[assertElement].clue, it, false);
 				console.log(list[assertElement].clue);
 				allAssertsOk = false;
 			}
